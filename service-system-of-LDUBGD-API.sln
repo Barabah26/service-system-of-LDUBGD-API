@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36930.0 d17.14
+VisualStudioVersion = 17.14.36930.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-system-of-LDUBGD-API", "service-system-of-LDUBGD-API\service-system-of-LDUBGD-API.csproj", "{1976E54A-AB4D-4C07-A02E-6C20698E4B5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-system-of-LDUBGD-API.Common", "service-system-of-LDUBGD-API.Common\service-system-of-LDUBGD-API.Common.csproj", "{AC033635-65F7-4C4D-93B0-6A651502D974}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-system-of-LDUBGD-API.Application", "service-system-of-LDUBGD-API.Application\service-system-of-LDUBGD-API.Application.csproj", "{B69673D5-749A-400C-8573-86A3924A2BEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-system-of-LDUBGD-API.Domain", "service-system-of-LDUBGD-API.Domain\service-system-of-LDUBGD-API.Domain.csproj", "{AAE96D36-95EA-4EC6-BB30-9B4A75A16B58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{1976E54A-AB4D-4C07-A02E-6C20698E4B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1976E54A-AB4D-4C07-A02E-6C20698E4B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1976E54A-AB4D-4C07-A02E-6C20698E4B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC033635-65F7-4C4D-93B0-6A651502D974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC033635-65F7-4C4D-93B0-6A651502D974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC033635-65F7-4C4D-93B0-6A651502D974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC033635-65F7-4C4D-93B0-6A651502D974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B69673D5-749A-400C-8573-86A3924A2BEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B69673D5-749A-400C-8573-86A3924A2BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B69673D5-749A-400C-8573-86A3924A2BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B69673D5-749A-400C-8573-86A3924A2BEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE96D36-95EA-4EC6-BB30-9B4A75A16B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE96D36-95EA-4EC6-BB30-9B4A75A16B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE96D36-95EA-4EC6-BB30-9B4A75A16B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE96D36-95EA-4EC6-BB30-9B4A75A16B58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
