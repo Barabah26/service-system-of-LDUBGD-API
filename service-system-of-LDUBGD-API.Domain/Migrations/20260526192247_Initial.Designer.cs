@@ -12,7 +12,7 @@ using service_system_of_LDUBGD_API.Domain;
 namespace service_system_of_LDUBGD_API.Domain.Migrations
 {
     [DbContext(typeof(ServiceSystemDbContext))]
-    [Migration("20260526191310_Initial")]
+    [Migration("20260526192247_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -259,10 +259,8 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("YearBirthday")
@@ -274,7 +272,7 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                     b.HasIndex("FullName")
                         .HasDatabaseName("IX_Statement_FullName");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Statement");
                 });
@@ -334,7 +332,9 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                 {
                     b.HasOne("service_system_of_LDUBGD_API.Domain.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

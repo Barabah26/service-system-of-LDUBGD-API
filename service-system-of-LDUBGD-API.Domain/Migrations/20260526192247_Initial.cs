@@ -170,17 +170,17 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Faculty = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TypeOfStatement = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Statement", x => x.StatementId);
                     table.ForeignKey(
-                        name: "FK_Statement_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Statement_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -228,9 +228,9 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                 column: "FullName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Statement_UserId1",
+                name: "IX_Statement_UserId",
                 table: "Statement",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />

@@ -9,7 +9,7 @@ public class Statement
     public required string PhoneNumber { get; set; }
     public required string Faculty { get; set; }
     public required string TypeOfStatement { get; set; }
-    public required int UserId { get; set; }
+    public required string UserId { get; set; }
     public ApplicationUser? User { get; set; }
 
 }
