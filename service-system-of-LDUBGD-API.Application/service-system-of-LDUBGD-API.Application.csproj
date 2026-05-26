@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\service-system-of-LDUBGD-API.Common\service-system-of-LDUBGD-API.Common.csproj" />
+    <ProjectReference Include="..\service-system-of-LDUBGD-API.Domain\service-system-of-LDUBGD-API.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
