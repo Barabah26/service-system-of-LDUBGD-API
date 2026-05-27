@@ -21,6 +21,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\service-system-of-LDUBGD-API.Application\service-system-of-LDUBGD-API.Application.csproj" />
     <ProjectReference Include="..\service-system-of-LDUBGD-API.Domain\service-system-of-LDUBGD-API.Domain.csproj" />
   </ItemGroup>
 

@@ -12,7 +12,7 @@ using service_system_of_LDUBGD_API.Domain;
 namespace service_system_of_LDUBGD_API.Domain.Migrations
 {
     [DbContext(typeof(ServiceSystemDbContext))]
-    [Migration("20260526192247_Initial")]
+    [Migration("20260527100126_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -255,17 +255,15 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TypeOfStatement")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TypeOfStatement")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("YearBirthday")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("YearBirthday")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("StatementId");
 

@@ -165,11 +165,11 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                     StatementId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FullName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    YearBirthday = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    YearBirthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Group = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Faculty = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeOfStatement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeOfStatement = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
