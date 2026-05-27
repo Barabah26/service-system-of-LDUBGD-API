@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	 <PackageReference Include="AutoMapper" Version="15.0.1" />
     <ProjectReference Include="..\service-system-of-LDUBGD-API.Common\service-system-of-LDUBGD-API.Common.csproj" />
     <ProjectReference Include="..\service-system-of-LDUBGD-API.Domain\service-system-of-LDUBGD-API.Domain.csproj" />
   </ItemGroup>
