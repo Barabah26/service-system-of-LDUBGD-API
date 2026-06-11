@@ -26,7 +26,19 @@ public class StatementController(IStatementService statementService) : BaseApiCo
         return ToActionResult(results);
     }
 
-    [HttpPost]
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<GetStatementListItemDto>>> FindStatementByName([FromQuery] string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+        {
+            return BadRequest("Name is required");
+        }
+
+        var results = await statementService.FindByName(fullName);
+        return ToActionResult(results);
+    }
+
+    [HttpPost("createStatement")]
     public async Task<ActionResult<GetStatementDto>> PostStatement(CreateStatementDto statementDto)
     {
         var result = await statementService.CreateStatement(statementDto);

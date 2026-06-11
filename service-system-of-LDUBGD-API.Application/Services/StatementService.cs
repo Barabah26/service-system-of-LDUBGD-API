@@ -53,6 +53,23 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
 
     }
 
+    public async Task<Result<IEnumerable<GetStatementListItemDto>>> FindByName(string fullName)
+    {
+        var statements = await context.Statement
+                .Where(s => EF.Functions.Like(s.FullName, $"%{fullName}%"))
+                .ProjectTo<GetStatementListItemDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+
+        if (statements == null)
+        {
+            return Result<IEnumerable<GetStatementListItemDto>>.Failure(new Error(ErrorCodes.Failure, "Statement was not found"));
+        }
+
+
+        return Result<IEnumerable<GetStatementListItemDto>>.Success(statements);
+    }
+
     public async Task<bool> StatementExistsAsync(int id)
     {
         return await context.Statement.AnyAsync(e => e.StatementId == id);

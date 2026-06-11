@@ -7,4 +7,5 @@ public interface IStatementService
 {
     Task<Result<GetStatementDto>> CreateStatement(CreateStatementDto statementDto);
     Task<Result<IEnumerable<GetStatementListItemDto>>> GetStatements();
+    Task<Result<IEnumerable<GetStatementListItemDto>>> FindByName(string fullName);
 }
