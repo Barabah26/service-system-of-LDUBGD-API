@@ -37,13 +37,15 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
             context.Statement.Add(statement);
             await context.SaveChangesAsync();
 
-            var dto = await context.Statement
-                .Where(s => s.StatementId == statement.StatementId)
-                .ProjectTo<GetStatementDto>(mapper.ConfigurationProvider)
-                .FirstAsync();
+            var dto = mapper.Map<GetStatementDto>(statement);
 
             return Result<GetStatementDto>.Success(dto);
         }
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine(ex.ToString());
+        //    throw;
+        //}
         catch
         {
             return Result<GetStatementDto>.Failure(new Error(ErrorCodes.Failure, "An unexpected error occurred while creating the statement."));
