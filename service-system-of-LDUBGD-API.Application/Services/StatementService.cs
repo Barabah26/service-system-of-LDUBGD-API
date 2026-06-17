@@ -83,8 +83,52 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
             .AnyAsync(c => c.FullName.ToLower().Trim() == fullName.ToLower().Trim());
     }
 
-    public Task<Result<IEnumerable<GetStatementListItemDto>>> FindByNameAndStatus(string fullName, string status)
+    public async Task<Result<IEnumerable<GetStatementListItemDto>>> FindByNameAndStatus(string fullName, StatementStatus status)
     {
-        throw new NotImplementedException();
+        var statements = await context.Statement
+            .Where(s => s.FullName.Contains(fullName) && s.Status == status)
+            .ProjectTo<GetStatementListItemDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        if (!statements.Any())
+        {
+            return Result<IEnumerable<GetStatementListItemDto>>
+                .Failure(new Error(ErrorCodes.NotFound, "Statements not found"));
+        }
+
+        return Result<IEnumerable<GetStatementListItemDto>>.Success(statements);
     }
+
+    public async Task<Result<IEnumerable<GetStatementListItemDto>>> FindByStatusAndFaculty(StatementStatus status, string faculty)
+    {
+        var statements = await context.Statement
+            .Where(s => s.Faculty.Contains(faculty) && s.Status == status)
+            .ProjectTo<GetStatementListItemDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        if (!statements.Any())
+        {
+            return Result<IEnumerable<GetStatementListItemDto>>
+                .Failure(new Error(ErrorCodes.NotFound, "Statements not found"));
+        }
+
+        return Result<IEnumerable<GetStatementListItemDto>>.Success(statements);
+    }
+
+    public async Task<Result> UpdateStatus(int id, StatementStatus status)
+    {
+        var statement = await context.Statement.FindAsync(id);
+
+        if (statement == null)
+        {
+            return Result.Failure(new Error(ErrorCodes.NotFound, "Statement not found"));
+        }
+
+        statement.Status = status;
+
+        await context.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
 }

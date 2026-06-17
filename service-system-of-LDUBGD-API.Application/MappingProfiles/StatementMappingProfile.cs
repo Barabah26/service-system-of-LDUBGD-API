@@ -30,12 +30,7 @@ public class StatementMappingProfile : Profile
             .ForMember(d => d.TypeOfStatement, opt => opt.MapFrom(s => s.TypeOfStatement))
             .ForMember(d => d.UserId, opt => opt.MapFrom(s => s.UserId));
         CreateMap<UpdateStatementDto, Statement>()
-            .ForMember(dest => dest.StatementId, opt => opt.Ignore())
-            .ForMember(dest => dest.YearBirthday,
-                opt => opt.MapFrom(src => src.DateOfBirth))
-            .ForMember(dest => dest.UserId, opt => opt.Ignore())
-            .ForAllMembers(opt =>
-                opt.Condition((src, dest, srcMember) => srcMember != null));
+            .ForMember(dest => dest.StatementId, opt => opt.Ignore());
 
     }
 }
