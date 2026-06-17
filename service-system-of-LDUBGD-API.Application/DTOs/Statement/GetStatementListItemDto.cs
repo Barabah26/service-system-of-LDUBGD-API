@@ -7,6 +7,7 @@ public record GetStatementListItemDto(
     int StatementId,
     string FullName,
     StatementType TypeOfStatement,
-    string Group
+    string Group,
+    StatementStatus Status
 );
 

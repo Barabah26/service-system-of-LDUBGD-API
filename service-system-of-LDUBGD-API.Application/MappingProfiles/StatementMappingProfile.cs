@@ -15,6 +15,7 @@ public class StatementMappingProfile : Profile
             .ForMember(d => d.DateOfBirth, opt => opt.MapFrom(s => s.YearBirthday))
             .ForMember(d => d.Group, opt => opt.MapFrom(s => s.Group))
             .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(s => s.PhoneNumber))
+            .ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status))
             .ForMember(d => d.Faculty, opt => opt.MapFrom(s => s.Faculty))
             .ForMember(d => d.TypeOfStatement, opt => opt.MapFrom(s => s.TypeOfStatement))
             .ForMember(d => d.UserId, opt => opt.MapFrom(s => s.UserId));

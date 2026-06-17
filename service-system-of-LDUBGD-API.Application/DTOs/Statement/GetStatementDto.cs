@@ -11,6 +11,7 @@ public class GetStatementDto
     public string Group { get; set; }
     public string PhoneNumber { get; set; }
     public string Faculty { get; set; }
+    public string Status { get; set; }
     public StatementType TypeOfStatement { get; set; }
     public string UserId { get; set; }
 }

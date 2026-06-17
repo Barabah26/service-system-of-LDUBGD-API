@@ -10,6 +10,7 @@ public class Statement
     public required string Group { get; set; }
     public required string PhoneNumber { get; set; }
     public required string Faculty { get; set; }
+    public required StatementStatus Status { get; set; }
     public required StatementType TypeOfStatement { get; set; }
     public required string UserId { get; set; }
     public ApplicationUser? User { get; set; }

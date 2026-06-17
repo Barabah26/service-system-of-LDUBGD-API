@@ -12,6 +12,7 @@ public class UpdateStatementDto
     public string? Group { get; init; }
     public string? PhoneNumber { get; init; }
     public string? Faculty { get; init; }
+    public string? Status { get; init; }
     public StatementType? TypeOfStatement { get; init; }
 }
 

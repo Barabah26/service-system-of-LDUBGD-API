@@ -12,8 +12,8 @@ using service_system_of_LDUBGD_API.Domain;
 namespace service_system_of_LDUBGD_API.Domain.Migrations
 {
     [DbContext(typeof(ServiceSystemDbContext))]
-    [Migration("20260527100126_Initial")]
-    partial class Initial
+    [Migration("20260617172018_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -252,6 +252,10 @@ namespace service_system_of_LDUBGD_API.Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

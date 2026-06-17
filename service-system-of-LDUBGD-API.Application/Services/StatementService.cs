@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using service_system_of_LDUBGD_API.Application.Contracts;
 using service_system_of_LDUBGD_API.Application.DTOs.Statement;
 using service_system_of_LDUBGD_API.Common.Constants;
+using service_system_of_LDUBGD_API.Common.Enums;
 using service_system_of_LDUBGD_API.Common.Results;
 using service_system_of_LDUBGD_API.Domain;
 using System.Diagnostics.Metrics;
@@ -33,7 +34,8 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
             }
 
             var statement = mapper.Map<Statement>(statementDto);
-            statement.UserId = "11111111-1111-1111-1111-111111111111";
+            statement.UserId = "19B9D097-4142-40C2-9C08-F6604EA66299";
+            statement.Status = StatementStatus.Pending;
             context.Statement.Add(statement);
             await context.SaveChangesAsync();
 
@@ -81,4 +83,8 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
             .AnyAsync(c => c.FullName.ToLower().Trim() == fullName.ToLower().Trim());
     }
 
+    public Task<Result<IEnumerable<GetStatementListItemDto>>> FindByNameAndStatus(string fullName, string status)
+    {
+        throw new NotImplementedException();
+    }
 }
