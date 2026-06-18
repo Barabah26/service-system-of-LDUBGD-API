@@ -10,15 +10,16 @@ public class ServiceSystemDbContext(DbContextOptions<ServiceSystemDbContext> opt
 {
     public DbSet<Statement> Statement { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         builder.Entity<Statement>()
-            .HasIndex(c => c.FullName)
-            .HasDatabaseName("IX_Statement_FullName");
+            .HasOne(s => s.User)
+            .WithMany(u => u.Statements)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
+
 
 }
