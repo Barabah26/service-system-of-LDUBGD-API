@@ -1,19 +1,32 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace service_system_of_LDUBGD_API.Domain;
+namespace service_system_of_LDUBGD_API.Application.DTOs.Auth;
 
-public class ApplicationUser : IdentityUser
+public class RegisterUserDto
 {
+    [Required]
     public string FirstName { get; set; } = string.Empty;
+    [Required]
     public string LastName { get; set; } = string.Empty;
+    [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;
+    [Required]
     public string Password { get; set; } = string.Empty;
+    [Required]
     public string Faculty { get; set; } = string.Empty;
+    [Required]
     public string Specialty { get; set; } = string.Empty;
+    [Required]
     public string Degree { get; set; } = string.Empty;
+    [Required]
     public string Group { get; set; } = string.Empty;
+    [Required]
     public string PhoneNumber { get; set; } = string.Empty;
+    [Required]
     public DateTime? DateBirth { get; set; }
-    public List<Statement> Statements { get; set; } = new();
-    public string FullName => $"{LastName}, {FirstName}";
 }

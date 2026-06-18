@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using service_system_of_LDUBGD_API.Domain;
 
@@ -11,9 +12,11 @@ using service_system_of_LDUBGD_API.Domain;
 namespace service_system_of_LDUBGD_API.Domain.Migrations
 {
     [DbContext(typeof(ServiceSystemDbContext))]
-    partial class ServiceSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260618184917_UpdateApplicationUserV3")]
+    partial class UpdateApplicationUserV3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
