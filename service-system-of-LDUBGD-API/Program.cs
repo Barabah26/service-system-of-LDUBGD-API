@@ -15,6 +15,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IStatementService, StatementService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 builder.Services.AddControllers();
 
