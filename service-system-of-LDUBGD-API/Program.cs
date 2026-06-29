@@ -1,17 +1,53 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using service_system_of_LDUBGD_API.Application.Contracts;
 using service_system_of_LDUBGD_API.Application.MappingProfiles;
 using service_system_of_LDUBGD_API.Application.Services;
+using service_system_of_LDUBGD_API.Common.Models;
 using service_system_of_LDUBGD_API.Domain;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("StatementServiceConnectionString");
 builder.Services.AddDbContext<ServiceSystemDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ServiceSystemDbContext>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>() ?? new JwtSettings();
+if (string.IsNullOrWhiteSpace(jwtSettings.Key))
+{
+    //Log.Fatal("JwtSettings:Key is not configured");
+    throw new InvalidOperationException("JwtSettings:Key is not configured.");
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+            ClockSkew = TimeSpan.Zero // Default is 5 minutes
+        };
+    });
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IStatementService, StatementService>();

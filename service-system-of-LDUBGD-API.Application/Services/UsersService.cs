@@ -1,25 +1,33 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using service_system_of_LDUBGD_API.Application.Contracts;
 using service_system_of_LDUBGD_API.Application.DTOs.Auth;
 using service_system_of_LDUBGD_API.Common.Constants;
+using service_system_of_LDUBGD_API.Common.Models;
 using service_system_of_LDUBGD_API.Common.Results;
 using service_system_of_LDUBGD_API.Domain;
-using System;
-using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace service_system_of_LDUBGD_API.Application.Services;
 
-public class UsersService(UserManager<ApplicationUser> userManager) : IUsersService
+public class UsersService(
+    UserManager<ApplicationUser> userManager,
+    IOptions<JwtSettings> jwtOptions,
+    ILogger<UsersService> logger) : IUsersService
 {
     public async Task<Result<RegisteredUserDto>> RegisterAsync(RegisterUserDto registerUserDto)
     {
         var user = new ApplicationUser
         {
+            UserName = registerUserDto.Email,
             FirstName = registerUserDto.FirstName,
             LastName = registerUserDto.LastName,
+            Password = registerUserDto.Password,
             Email = registerUserDto.Email,
             Faculty = registerUserDto.Faculty,
             PhoneNumber = registerUserDto.PhoneNumber,
@@ -68,6 +76,42 @@ public class UsersService(UserManager<ApplicationUser> userManager) : IUsersServ
             return Result<string>.Failure(new Error(ErrorCodes.BadRequest, "Invalid credentials"));
         }
 
-        return Result<string>.Success("Login successful.");
+        var token = await GenerateToken(user);
+
+        return Result<string>.Success(token);
+    }
+
+    private async Task<string> GenerateToken(ApplicationUser user)
+    {
+        // Set basic user claims
+        var claims = new List<Claim>
+        {
+            new (JwtRegisteredClaimNames.Sub, user.Id),
+            new (JwtRegisteredClaimNames.Email, user.Email!),
+            new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Name, user.FullName)
+        };
+
+        // Set user role claims
+        var roles = await userManager.GetRolesAsync(user);
+        var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x)).ToList();
+
+        claims = claims.Union(roleClaims).ToList();
+
+        // Set JWT Key credentials
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        // Create an encoded token
+        var token = new JwtSecurityToken(
+            issuer: jwtOptions.Value.Issuer,
+            audience: jwtOptions.Value.Audience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(jwtOptions.Value.DurationInMinutes)),
+            signingCredentials: credentials
+            );
+
+        // Return token value
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
