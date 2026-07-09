@@ -13,8 +13,6 @@ public class RegisterUserDto
     public string FirstName { get; set; } = string.Empty;
     [Required]
     public string LastName { get; set; } = string.Empty;
-    [Required]
-    public string UserName { get; set; } = string.Empty;
     [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;
     [Required]
@@ -30,5 +28,5 @@ public class RegisterUserDto
     [Required]
     public string PhoneNumber { get; set; } = string.Empty;
     [Required]
-    public DateTime? DateBirth { get; set; }
+    public DateOnly? DateBirth { get; set; }
 }

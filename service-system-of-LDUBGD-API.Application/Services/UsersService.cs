@@ -27,7 +27,6 @@ public class UsersService(
             UserName = registerUserDto.Email,
             FirstName = registerUserDto.FirstName,
             LastName = registerUserDto.LastName,
-            Password = registerUserDto.Password,
             Email = registerUserDto.Email,
             Faculty = registerUserDto.Faculty,
             PhoneNumber = registerUserDto.PhoneNumber,
@@ -92,11 +91,11 @@ public class UsersService(
             new (JwtRegisteredClaimNames.Name, user.FullName)
         };
 
-        // Set user role claims
-        var roles = await userManager.GetRolesAsync(user);
-        var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x)).ToList();
+        //// Set user role claims
+        //var roles = await userManager.GetRolesAsync(user);
+        //var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x)).ToList();
 
-        claims = claims.Union(roleClaims).ToList();
+        //claims = claims.Union(roleClaims).ToList();
 
         // Set JWT Key credentials
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key));
