@@ -1,4 +1,5 @@
-﻿using System;
+﻿using service_system_of_LDUBGD_API.Common.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,4 +30,5 @@ public class RegisterUserDto
     public string PhoneNumber { get; set; } = string.Empty;
     [Required]
     public DateOnly? DateBirth { get; set; }
+    public string Role { get; set; } = RoleNames.Student;
 }

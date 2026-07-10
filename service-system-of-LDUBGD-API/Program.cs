@@ -16,8 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("StatementServiceConnectionString");
 builder.Services.AddDbContext<ServiceSystemDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<ServiceSystemDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<ServiceSystemDbContext>()
+        .AddDefaultTokenProviders();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
@@ -64,8 +65,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapIdentityApi<ApplicationUser>();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -75,6 +74,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

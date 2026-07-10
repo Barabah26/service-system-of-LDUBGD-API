@@ -16,10 +16,13 @@ namespace service_system_of_LDUBGD_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[Authorize]
 public class StatementController(IStatementService statementService) : BaseApiController
 {
   
     [HttpGet]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<IEnumerable<GetStatementListItemDto>>> GetStatements()
     {
 
@@ -28,6 +31,7 @@ public class StatementController(IStatementService statementService) : BaseApiCo
     }
 
     [HttpGet("search")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<IEnumerable<GetStatementListItemDto>>> FindStatementByName([FromQuery] string fullName)
     {
         if (string.IsNullOrWhiteSpace(fullName))
@@ -40,6 +44,7 @@ public class StatementController(IStatementService statementService) : BaseApiCo
     }
 
     [HttpPost("createStatement")]
+    [Authorize(Roles = "Student")]
     public async Task<ActionResult<GetStatementDto>> PostStatement(CreateStatementDto statementDto)
     {
         var result = await statementService.CreateStatement(statementDto);
@@ -50,6 +55,7 @@ public class StatementController(IStatementService statementService) : BaseApiCo
     }
 
     [HttpGet("findByFullNameAndStatus")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<IEnumerable<GetStatementListItemDto>>> FindStatementByNameAndStatus([FromQuery] string fullName, [FromQuery] StatementStatus status)
     {
         if (string.IsNullOrWhiteSpace(fullName))
@@ -62,6 +68,7 @@ public class StatementController(IStatementService statementService) : BaseApiCo
     }
 
     [HttpGet("findByFacultyAndStatus")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<IEnumerable<GetStatementListItemDto>>> FindStatementByFacultyAndStatus([FromQuery] string faculty, [FromQuery] StatementStatus status)
     {
         if (string.IsNullOrWhiteSpace(faculty))
@@ -74,6 +81,7 @@ public class StatementController(IStatementService statementService) : BaseApiCo
     }
 
     [HttpPatch("update-status")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult> UpdateStatus(UpdateStatementDto dto)
     {
         var result = await statementService.UpdateStatus(dto.StatementId, dto.Status);

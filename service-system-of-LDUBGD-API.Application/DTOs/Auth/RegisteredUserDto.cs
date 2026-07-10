@@ -12,4 +12,5 @@ public class RegisteredUserDto
     public string Group { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public DateOnly? DateBirth { get; set; }
+    public string Role { get; set; }
 }

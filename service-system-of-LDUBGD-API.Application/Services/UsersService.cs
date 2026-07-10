@@ -44,6 +44,8 @@ public class UsersService(
             return Result<RegisteredUserDto>.BadRequest(errors);
         }
 
+        await userManager.AddToRoleAsync(user, registerUserDto.Role);
+
         var registeredUser = new RegisteredUserDto
         {
             FirstName = user.FirstName,
@@ -55,7 +57,8 @@ public class UsersService(
             Degree = user.Degree,
             Group = user.Group,
             DateBirth = user.DateBirth,
-            Id = user.Id
+            Id = user.Id,
+            Role = registerUserDto.Role
         };
 
         return Result<RegisteredUserDto>.Success(registeredUser);
@@ -91,11 +94,11 @@ public class UsersService(
             new (JwtRegisteredClaimNames.Name, user.FullName)
         };
 
-        //// Set user role claims
-        //var roles = await userManager.GetRolesAsync(user);
-        //var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x)).ToList();
+        // Set user role claims
+        var roles = await userManager.GetRolesAsync(user);
+        var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x)).ToList();
 
-        //claims = claims.Union(roleClaims).ToList();
+        claims = claims.Union(roleClaims).ToList();
 
         // Set JWT Key credentials
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key));

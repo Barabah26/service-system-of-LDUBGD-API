@@ -19,6 +19,7 @@ public class ServiceSystemDbContext(DbContextOptions<ServiceSystemDbContext> opt
             .WithMany(u => u.Statements)
             .HasForeignKey(s => s.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
 
