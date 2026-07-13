@@ -6,7 +6,7 @@ public class Statement
 {
     public int StatementId { get; set; }
     public required string FullName { get; set; }
-    public required DateTime YearBirthday { get; set; }
+    public required DateOnly YearBirthday { get; set; }
     public required string Group { get; set; }
     public required string PhoneNumber { get; set; }
     public required string Faculty { get; set; }

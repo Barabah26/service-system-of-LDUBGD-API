@@ -9,14 +9,15 @@ using service_system_of_LDUBGD_API.Application.DTOs.Statement;
 using service_system_of_LDUBGD_API.Common.Enums;
 using service_system_of_LDUBGD_API.Domain;
 using System.Diagnostics.Metrics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace service_system_of_LDUBGD_API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 [Authorize]
 public class StatementController(IStatementService statementService) : BaseApiController
 {
@@ -87,6 +88,22 @@ public class StatementController(IStatementService statementService) : BaseApiCo
         var result = await statementService.UpdateStatus(dto.StatementId, dto.Status);
 
         return ToActionResult(result);
+    }
+
+    [HttpGet("my-statements")]
+    [Authorize(Roles = "Student")]
+    public async Task<ActionResult<IEnumerable<GetStatementListItemDto>>> FindStatementByUserId()
+    {
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //if (string.IsNullOrWhiteSpace(userId))
+        //{
+        //    return Unauthorized();
+        //}
+
+        var results = await statementService.FindByUserId(userId);
+        return ToActionResult(results);
     }
 
 }

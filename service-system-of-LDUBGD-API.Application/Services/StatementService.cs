@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using service_system_of_LDUBGD_API.Application.Contracts;
 using service_system_of_LDUBGD_API.Application.DTOs.Statement;
@@ -8,10 +9,11 @@ using service_system_of_LDUBGD_API.Common.Enums;
 using service_system_of_LDUBGD_API.Common.Results;
 using service_system_of_LDUBGD_API.Domain;
 using System.Diagnostics.Metrics;
+using System.Security.Claims;
 
 namespace service_system_of_LDUBGD_API.Application.Services;
 
-public class StatementService(ServiceSystemDbContext context, IMapper mapper) : IStatementService
+public class StatementService(ServiceSystemDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : IStatementService
 {
     public async Task<Result<IEnumerable<GetStatementListItemDto>>> GetStatements()
     {
@@ -27,32 +29,50 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
     {
         try
         {
-            var exists = await StatementExistsAsync(statementDto.FullName);
+            var userId = httpContextAccessor.HttpContext?
+                .User
+                .FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Result<GetStatementDto>.Failure(
+                    new Error(
+                        ErrorCodes.Forbid,
+                        "User is not authenticated"));
+            }
+
+            var exists = await StatementExistsAsync(
+                userId,
+                statementDto.TypeOfStatement);
+
             if (exists)
             {
-                return Result<GetStatementDto>.Failure(new Error(ErrorCodes.Conflict, $"Statement with name '{statementDto.FullName}' already exists."));
+                return Result<GetStatementDto>.Failure(
+                    new Error(
+                        ErrorCodes.Conflict,
+                        "You already have an active statement of this type."));
             }
 
             var statement = mapper.Map<Statement>(statementDto);
-            statement.UserId = "19B9D097-4142-40C2-9C08-F6604EA66299";
+
+            statement.UserId = userId;
             statement.Status = StatementStatus.Pending;
+
             context.Statement.Add(statement);
+
             await context.SaveChangesAsync();
 
             var dto = mapper.Map<GetStatementDto>(statement);
 
             return Result<GetStatementDto>.Success(dto);
         }
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine(ex.ToString());
-        //    throw;
-        //}
-        catch
+        catch (Exception)
         {
-            return Result<GetStatementDto>.Failure(new Error(ErrorCodes.Failure, "An unexpected error occurred while creating the statement."));
+            return Result<GetStatementDto>.Failure(
+                new Error(
+                    ErrorCodes.Failure,
+                    "An unexpected error occurred while creating the statement."));
         }
-
     }
 
     public async Task<Result<IEnumerable<GetStatementListItemDto>>> FindByName(string fullName)
@@ -72,15 +92,14 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
         return Result<IEnumerable<GetStatementListItemDto>>.Success(statements);
     }
 
-    public async Task<bool> StatementExistsAsync(int id)
-    {
-        return await context.Statement.AnyAsync(e => e.StatementId == id);
-    }
-
-    public async Task<bool> StatementExistsAsync(string fullName)
+    public async Task<bool> StatementExistsAsync(string userId, StatementType type)
     {
         return await context.Statement
-            .AnyAsync(c => c.FullName.ToLower().Trim() == fullName.ToLower().Trim());
+            .AnyAsync(s =>
+                s.UserId == userId &&
+                s.TypeOfStatement == type &&
+                (s.Status == StatementStatus.Pending ||
+                 s.Status == StatementStatus.InProgress));
     }
 
     public async Task<Result<IEnumerable<GetStatementListItemDto>>> FindByNameAndStatus(string fullName, StatementStatus status)
@@ -131,4 +150,13 @@ public class StatementService(ServiceSystemDbContext context, IMapper mapper) : 
         return Result.Success();
     }
 
+    public async Task<Result<IEnumerable<GetStatementListItemDto>>> FindByUserId(string userId)
+    {
+        var statements = await context.Statement
+         .Where(s => s.UserId == userId)
+         .ProjectTo<GetStatementListItemDto>(mapper.ConfigurationProvider)
+         .ToListAsync();
+
+        return Result<IEnumerable<GetStatementListItemDto>>.Success(statements);
+    }
 }
